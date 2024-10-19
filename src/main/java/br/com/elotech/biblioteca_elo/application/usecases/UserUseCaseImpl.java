@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserUseCaseImpl implements UserUseCase {
@@ -41,8 +40,9 @@ public class UserUseCaseImpl implements UserUseCase {
     @Override
     public List<UserResponse> listUsers() {
         List<User> allUsers = repository.findAll();
-        return allUsers.stream().map(
-                user -> mapper.fromDomainToResponse(mapper.fromEntityToDomain(user)))
+        return allUsers
+                .stream()
+                .map(user -> mapper.fromDomainToResponse(mapper.fromEntityToDomain(user)))
                 .toList();
     }
 

@@ -1,7 +1,6 @@
 package br.com.elotech.biblioteca_elo.interfacesAdapters.controllers;
 
 import br.com.elotech.biblioteca_elo.application.validations.EmailValidator;
-import br.com.elotech.biblioteca_elo.domain.entities.UserDomain;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.interfaces.UserUseCase;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.UserRequest;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -45,8 +43,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> findUser(@Valid @PathVariable String id) {
-        UserResponse usuarioDTO = userUseCase.findById(id);
-        return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
+        if(Objects.isNull(id)){
+            UserResponse usuarioDTO = userUseCase.findById(id);
+            return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping
