@@ -34,18 +34,18 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Object> createUser(@Valid @RequestBody UserRequest userRequest) {
         if(EmailValidator.isValidEmail(userRequest.email())) {
-            UserResponse novoUsuario = userUseCase.createUser(userRequest);
-            return new ResponseEntity<>(novoUsuario, HttpStatus.CREATED);
+            UserResponse userResponse = userUseCase.createUser(userRequest);
+            return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
         }else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> findUser(@Valid @PathVariable String id) {
+    public ResponseEntity<UserResponse> getUserById(@Valid @PathVariable String id) {
         if(Objects.isNull(id)){
-            UserResponse usuarioDTO = userUseCase.findById(id);
-            return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
+            UserResponse userResponse = userUseCase.findById(id);
+            return new ResponseEntity<>(userResponse, HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -53,14 +53,14 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> listUsers() {
-        List<UserResponse> usuarios = userUseCase.listUsers();
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+        List<UserResponse> usersResponse = userUseCase.listUsers();
+        return new ResponseEntity<>(usersResponse, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@Valid @PathVariable String id, @RequestBody UserRequest userRequest) {
-        UserResponse usuarioAtualizado = userUseCase.updateUser(id, userRequest);
-        return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
+        UserResponse userResponse = userUseCase.updateUser(id, userRequest);
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
