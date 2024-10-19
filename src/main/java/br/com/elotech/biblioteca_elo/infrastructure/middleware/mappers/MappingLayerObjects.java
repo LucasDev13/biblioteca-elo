@@ -1,9 +1,23 @@
 package br.com.elotech.biblioteca_elo.infrastructure.middleware.mappers;
 
+import br.com.elotech.biblioteca_elo.domain.entities.BookDomain;
+import br.com.elotech.biblioteca_elo.domain.entities.UserDomain;
+import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Book;
+import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.User;
+import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.BookRequest;
+import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.UserRequest;
+import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.BookResponse;
+import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
+
 public interface MappingLayerObjects {
 
-    <T, R> R fromRequestToDomain(T request, Class<R> domainClass);
-    <T, R> R fromDomainToEntity(T domain, Class<R> entityClass);
-    <T, R> R fromEntityToDomain(T entity, Class<R> domainClass);
-    <T, R> R fromDomainToResponse(T domain, Class<R> responseClass);
+    UserDomain fromRequestToDomain(UserRequest request);
+    User fromDomainToEntity(UserDomain domain);
+    UserDomain fromEntityToDomain(User entiy);
+    UserResponse fromDomainToResponse(UserDomain domain);
+
+    BookDomain fromRequestToDomain(BookRequest request);
+    Book fromDomainToEntity(BookDomain domain);
+    BookDomain fromEntityToDomain(Book entiy);
+    BookResponse fromDomainToResponse(BookDomain domain);
 }

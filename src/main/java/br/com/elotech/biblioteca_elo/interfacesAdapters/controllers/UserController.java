@@ -43,7 +43,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@Valid @PathVariable String id) {
-        if(Objects.isNull(id)){
+        if(!Objects.isNull(id)){
             UserResponse userResponse = userUseCase.findById(id);
             return new ResponseEntity<>(userResponse, HttpStatus.OK);
         }else {

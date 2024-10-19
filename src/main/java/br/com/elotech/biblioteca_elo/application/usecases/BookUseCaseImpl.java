@@ -7,11 +7,13 @@ import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersiste
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.repositories.bookRepository.BookRepository;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.BookRequest;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.BookResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class BookUseCaseImpl implements BookUseCase {
@@ -19,7 +21,6 @@ public class BookUseCaseImpl implements BookUseCase {
     private final MappingLayerObjects mapper;
     private final BookRepository repository;
 
-    @Autowired
     public BookUseCaseImpl(MappingLayerObjects mapper, BookRepository repository) {
         this.mapper = mapper;
         this.repository = repository;
@@ -27,28 +28,49 @@ public class BookUseCaseImpl implements BookUseCase {
 
     @Override
     public BookResponse saveBook(BookRequest request) {
-        BookDomain domain = mapper.fromRequestToDomain(request, BookDomain.class);
-        Book bookSaved = repository.save(mapper.fromDomainToEntity(domain, Book.class));
-        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(bookSaved, BookDomain.class), BookResponse.class);
+        BookDomain domain = mapper.fromRequestToDomain(request);
+        domain.setRegistrationDate(LocalDateTime.now());
+        Book bookSaved = repository.save(mapper.fromDomainToEntity(domain));
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(bookSaved));
     }
 
     @Override
     public List<BookResponse> listAllBooks() {
-        return List.of();
+        List<Book> allBooks = repository.findAll();
+        return allBooks
+                .stream()
+                .map(book -> mapper.fromDomainToResponse(mapper.fromEntityToDomain(book)))
+                .toList();
     }
 
     @Override
-    public Optional<BookResponse> findBookById(Long id) {
-        return Optional.empty();
+    public BookResponse findById(UUID id) {
+        Book book = findBookById(id);
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(book));
     }
 
     @Override
-    public BookResponse updateBook(Long id, BookRequest request) {
-        return null;
+    public BookResponse updateBook(UUID id, BookRequest request) {
+        Book book = findBookById(id);
+        book.setTitle(request.title());
+        book.setAuthor(request.author());
+        book.setIsbn(request.isbn());
+        book.setPublicationDate(request.publicationDate());
+
+        repository.save(book);
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(book));
     }
 
     @Override
-    public void deleteBook(Long id) {
+    public void deleteBook(UUID id) {
+        Book book = findBookById(id);
+        if(!Objects.isNull(book)){
+            repository.delete(book);
+        }
+    }
 
+    @Override
+    public Book findBookById(UUID id){
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book id not found" + id));
     }
 }

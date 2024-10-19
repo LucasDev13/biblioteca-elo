@@ -27,15 +27,15 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
-        UserDomain domain = mapper.fromRequestToDomain(userRequest, UserDomain.class);
-        User userSaved = repository.save(mapper.fromDomainToEntity(domain, User.class));
-        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(userSaved, UserDomain.class), UserResponse.class);
+        UserDomain domain = mapper.fromRequestToDomain(userRequest);
+        User userSaved = repository.save(mapper.fromDomainToEntity(domain));
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(userSaved));
     }
 
     @Override
     public UserResponse findById(String id) {
         User user = findUserById(UUID.fromString(id));
-        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user, UserDomain.class), UserResponse.class);
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class UserUseCaseImpl implements UserUseCase {
         List<User> allUsers = repository.findAll();
         return allUsers
                 .stream()
-                .map(user -> mapper.fromDomainToResponse(mapper.fromEntityToDomain(user, UserDomain.class), UserResponse.class))
+                .map(user -> mapper.fromDomainToResponse(mapper.fromEntityToDomain(user)))
                 .toList();
     }
 
@@ -55,7 +55,7 @@ public class UserUseCaseImpl implements UserUseCase {
         user.setPhoneNumber(user.getPhoneNumber());
 
         repository.save(user);
-        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user, UserDomain.class), UserResponse.class);
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user));
     }
 
     @Override

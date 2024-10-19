@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/books")
@@ -44,20 +46,23 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponse> getBookById(@Valid @PathVariable Long id) {
-        Optional<BookResponse> book = bookUseCase.findBookById(id);
-        return book.map(ResponseEntity::ok)
-                .orElseThrow(() -> new EntityNotFoundException("Book not found"));
+    public ResponseEntity<BookResponse> getBookById(@Valid @PathVariable UUID id) {
+        if (!Objects.isNull(id)) {
+            BookResponse book = bookUseCase.findById(id);
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookResponse> updateBook(@Valid @PathVariable Long id, @RequestBody BookRequest request) {
+    public ResponseEntity<BookResponse> updateBook(@Valid @PathVariable UUID id, @RequestBody BookRequest request) {
         BookResponse updatedBook = bookUseCase.updateBook(id, request);
         return ResponseEntity.ok(updatedBook);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@Valid @PathVariable Long id) {
+    public ResponseEntity<Void> deleteBook(@Valid @PathVariable UUID id) {
         bookUseCase.deleteBook(id);
         return ResponseEntity.noContent().build();
     }
