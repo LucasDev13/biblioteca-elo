@@ -3,6 +3,8 @@ package br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersist
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.enuns.StatusLoan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -36,12 +38,13 @@ public class Loan {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @Column(name = "data_emprestimo")
+    @Column(name = "loan_date")
     private LocalDate loanDate;
 
     @Column(name = "expected_return_date_book")
     private LocalDate expectedReturnDateBook;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusLoan status;
 }
