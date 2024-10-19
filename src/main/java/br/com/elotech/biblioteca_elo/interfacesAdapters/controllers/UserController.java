@@ -45,7 +45,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> findUser(@Valid @PathVariable String id) {
-        UserResponse usuarioDTO = userUseCase.findUserById(id);
+        UserResponse usuarioDTO = userUseCase.findById(id);
         return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
     }
 

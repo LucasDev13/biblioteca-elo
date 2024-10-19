@@ -1,6 +1,5 @@
 package br.com.elotech.biblioteca_elo.application.usecases;
 
-import br.com.elotech.biblioteca_elo.domain.entities.UserDomain;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.interfaces.UserUseCase;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.mappers.MappingLayerObjects;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.User;
@@ -8,13 +7,10 @@ import br.com.elotech.biblioteca_elo.infrastructure.persistence.repositories.use
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.UserRequest;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,8 +32,9 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public UserResponse findUserById(String id) {
-        return null;
+    public UserResponse findById(String id) {
+        User user = findUserById(UUID.fromString(id));
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user));
     }
 
     @Override
