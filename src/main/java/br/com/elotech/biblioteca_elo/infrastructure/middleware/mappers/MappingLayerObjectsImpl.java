@@ -1,51 +1,46 @@
 package br.com.elotech.biblioteca_elo.infrastructure.middleware.mappers;
 
-import br.com.elotech.biblioteca_elo.domain.entities.UserDomain;
-import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.User;
-import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.UserRequest;
-import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Component
 public class MappingLayerObjectsImpl implements MappingLayerObjects {
+
     @Override
-    public UserDomain fromRequestToDomain(UserRequest request) {
+    public <T, R> R fromRequestToDomain(T request, Class<R> domainClass) {
         if(!Objects.isNull(request)) {
-            return UserDomain.builder()
-                    .name(request.name())
-                    .email(request.email())
-                    .phoneNumber(request.phoneNumber())
-                    .build();
+            ModelMapper modelMapper = new ModelMapper();
+            return modelMapper.map(request, domainClass);
         }
         throw new IllegalArgumentException("Request cannot be null");
     }
 
     @Override
-    public User fromDomainToEntity(UserDomain domain) {
-        return User.builder()
-                .name(domain.getName())
-                .email(domain.getEmail())
-                .phoneNumber(domain.getPhoneNumber())
-                .build();
+    public <T, R> R fromDomainToEntity(T domain, Class<R> entityClass) {
+        if(!Objects.isNull(domain)){
+            ModelMapper modelMapper = new ModelMapper();
+            return modelMapper.map(domain, entityClass);
+        }
+        throw new IllegalArgumentException("Domain object cannot be null");
     }
 
     @Override
-    public UserDomain fromEntityToDomain(User entiy) {
-        return UserDomain.builder()
-                .name(entiy.getName())
-                .email(entiy.getEmail())
-                .phoneNumber(entiy.getPhoneNumber())
-                .build();
+    public <T, R> R fromEntityToDomain(T entity, Class<R> domainClass) {
+        if(!Objects.isNull(entity)){
+            ModelMapper modelMapper = new ModelMapper();
+            return modelMapper.map(entity,domainClass);
+        }
+        throw new IllegalArgumentException("Entity object cannot be null");
     }
 
     @Override
-    public UserResponse fromDomainToResponse(UserDomain domain) {
-        return new UserResponse(
-                domain.getName(),
-                domain.getEmail(),
-                domain.getPhoneNumber()
-        );
+    public <T, R> R fromDomainToResponse(T domain, Class<R> responseClass) {
+        if(!Objects.isNull(domain)){
+            ModelMapper modelMapper = new ModelMapper();
+            return modelMapper.map(domain, responseClass);
+        }
+        throw new IllegalArgumentException("Domain object cannot be null");
     }
 }

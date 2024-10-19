@@ -1,5 +1,6 @@
 package br.com.elotech.biblioteca_elo.application.usecases;
 
+import br.com.elotech.biblioteca_elo.domain.entities.UserDomain;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.interfaces.UserUseCase;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.mappers.MappingLayerObjects;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.User;
@@ -26,15 +27,15 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
-        var domain = mapper.fromRequestToDomain(userRequest);
-        User userSaved = repository.save(mapper.fromDomainToEntity(domain));
-        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(userSaved));
+        UserDomain domain = mapper.fromRequestToDomain(userRequest, UserDomain.class);
+        User userSaved = repository.save(mapper.fromDomainToEntity(domain, User.class));
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(userSaved, UserDomain.class), UserResponse.class);
     }
 
     @Override
     public UserResponse findById(String id) {
         User user = findUserById(UUID.fromString(id));
-        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user));
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user, UserDomain.class), UserResponse.class);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class UserUseCaseImpl implements UserUseCase {
         List<User> allUsers = repository.findAll();
         return allUsers
                 .stream()
-                .map(user -> mapper.fromDomainToResponse(mapper.fromEntityToDomain(user)))
+                .map(user -> mapper.fromDomainToResponse(mapper.fromEntityToDomain(user, UserDomain.class), UserResponse.class))
                 .toList();
     }
 
@@ -54,7 +55,7 @@ public class UserUseCaseImpl implements UserUseCase {
         user.setPhoneNumber(user.getPhoneNumber());
 
         repository.save(user);
-        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user));
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user, UserDomain.class), UserResponse.class);
     }
 
     @Override
