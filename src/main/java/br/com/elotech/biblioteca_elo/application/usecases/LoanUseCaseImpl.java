@@ -57,13 +57,8 @@ public record LoanUseCaseImpl(
     public Loan updateLoanStatus(UUID loanId, StatusLoan newStatus, LocalDate returnDate) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
-
-        // Atualiza o status e data de devolução (se o status for RETURNED)
         loan.setStatus(newStatus);
         if (newStatus == StatusLoan.RETURNED) {
-            //Se for status RETURNED, precisa registrar na tabela tbl_returned a data de retorno e o status
-            //Seria um bom momento para usar events
-            //loan.setReturnDate(returnDate != null ? returnDate : LocalDate.now());
             publisher.publishEvent(new ReturnedBookEvent(this, loan));
         }
 
