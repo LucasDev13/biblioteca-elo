@@ -3,6 +3,5 @@ package br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersist
 public enum StatusLoan {
 
     ACTIVE,
-    RETURNED,
-    PENDING
+    RETURNED
 }

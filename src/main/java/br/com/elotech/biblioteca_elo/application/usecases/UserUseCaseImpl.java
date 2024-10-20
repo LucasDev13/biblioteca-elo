@@ -15,15 +15,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class UserUseCaseImpl implements UserUseCase {
-
-    private final MappingLayerObjects mapper;
-    private final UserRepository repository;
-
-    public UserUseCaseImpl(MappingLayerObjects mapper, UserRepository repository) {
-        this.mapper = mapper;
-        this.repository = repository;
-    }
+public record UserUseCaseImpl(
+        MappingLayerObjects mapper,
+        UserRepository repository
+) implements UserUseCase {
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
@@ -61,7 +56,7 @@ public class UserUseCaseImpl implements UserUseCase {
     @Override
     public void deleteUser(String id) {
         User user = findUserById(UUID.fromString(id));
-        if(!Objects.isNull(user)){
+        if (!Objects.isNull(user)) {
             repository.delete(user);
         }
     }

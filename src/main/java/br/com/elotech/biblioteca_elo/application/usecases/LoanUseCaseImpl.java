@@ -1,5 +1,6 @@
 package br.com.elotech.biblioteca_elo.application.usecases;
 
+import br.com.elotech.biblioteca_elo.application.events.ReturnedBookEvent;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.interfaces.LoanUseCase;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.mappers.MappingLayerObjects;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Book;
@@ -11,6 +12,7 @@ import br.com.elotech.biblioteca_elo.infrastructure.persistence.repositories.loa
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.repositories.userRepository.UserRepository;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.LoanResponse;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,19 +20,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class LoanUseCaseImpl implements LoanUseCase {
-
-    private final LoanRepository loanRepository;
-    private final UserRepository userRepository;
-    private final BookRepository bookRepository;
-    private final MappingLayerObjects mapper;
-
-    public LoanUseCaseImpl(LoanRepository loanRepository, UserRepository userRepository, BookRepository bookRepository, MappingLayerObjects mapper) {
-        this.loanRepository = loanRepository;
-        this.userRepository = userRepository;
-        this.bookRepository = bookRepository;
-        this.mapper = mapper;
-    }
+public record LoanUseCaseImpl(
+        LoanRepository loanRepository,
+        UserRepository userRepository,
+        BookRepository bookRepository,
+        MappingLayerObjects mapper,
+        ApplicationEventPublisher publisher
+) implements LoanUseCase {
 
     @Override
     public LoanResponse createLoan(UUID userId, UUID bookId) {
@@ -62,9 +58,13 @@ public class LoanUseCaseImpl implements LoanUseCase {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new EntityNotFoundException("Loan not found"));
 
+        // Atualiza o status e data de devolução (se o status for RETURNED)
         loan.setStatus(newStatus);
         if (newStatus == StatusLoan.RETURNED) {
-            loan.setReturnDate(returnDate != null ? returnDate : LocalDate.now());
+            //Se for status RETURNED, precisa registrar na tabela tbl_returned a data de retorno e o status
+            //Seria um bom momento para usar events
+            //loan.setReturnDate(returnDate != null ? returnDate : LocalDate.now());
+            publisher.publishEvent(new ReturnedBookEvent(this, loan));
         }
 
         return loanRepository.save(loan);

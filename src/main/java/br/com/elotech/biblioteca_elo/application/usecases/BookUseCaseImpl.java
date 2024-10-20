@@ -16,15 +16,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class BookUseCaseImpl implements BookUseCase {
+public record BookUseCaseImpl(
+        MappingLayerObjects mapper,
+        BookRepository repository
+) implements BookUseCase {
 
-    private final MappingLayerObjects mapper;
-    private final BookRepository repository;
-
-    public BookUseCaseImpl(MappingLayerObjects mapper, BookRepository repository) {
-        this.mapper = mapper;
-        this.repository = repository;
-    }
 
     @Override
     public BookResponse saveBook(BookRequest request) {
@@ -64,13 +60,13 @@ public class BookUseCaseImpl implements BookUseCase {
     @Override
     public void deleteBook(UUID id) {
         Book book = findBookById(id);
-        if(!Objects.isNull(book)){
+        if (!Objects.isNull(book)) {
             repository.delete(book);
         }
     }
 
     @Override
-    public Book findBookById(UUID id){
+    public Book findBookById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book id not found" + id));
     }
 }
