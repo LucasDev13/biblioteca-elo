@@ -1,12 +1,15 @@
 package br.com.elotech.biblioteca_elo.infrastructure.middleware.mappers;
 
 import br.com.elotech.biblioteca_elo.domain.entities.BookDomain;
+import br.com.elotech.biblioteca_elo.domain.entities.LoanDomain;
 import br.com.elotech.biblioteca_elo.domain.entities.UserDomain;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Book;
+import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Loan;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.User;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.BookRequest;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.UserRequest;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.BookResponse;
+import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.LoanResponse;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
 import org.springframework.stereotype.Component;
 
@@ -126,4 +129,39 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
         }
         throw new IllegalArgumentException("Domain object cannot be null");
     }
+
+    /*
+     * Loan Mapper
+     */
+    @Override
+    public LoanDomain fromEntityToDomain(Loan entiy) {
+        if (!Objects.isNull(entiy)) {
+            return LoanDomain
+                    .builder()
+                    .user(entiy.getUser())
+                    .book(entiy.getBook())
+                    .loanDate(entiy.getLoanDate())
+                    .expectedReturnDateBook(entiy.getExpectedReturnDateBook())
+                    .status(entiy.getStatus())
+                    .build();
+        }
+        throw new IllegalArgumentException("Entity object cannot be null");
+    }
+
+    @Override
+    public LoanResponse fromDomainToResponse(LoanDomain domain) {
+        if (!Objects.isNull(domain)) {
+            return new LoanResponse(
+                    domain.getUser(),
+                    domain.getBook(),
+                    domain.getLoanDate(),
+                    domain.getExpectedReturnDateBook(),
+                    domain.getStatus()
+            );
+        }
+        throw new IllegalArgumentException("Domain object cannot be null");
+    }
+
+
+
 }

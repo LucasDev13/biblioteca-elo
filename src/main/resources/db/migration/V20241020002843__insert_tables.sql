@@ -1,0 +1,2 @@
+insert into tbl_users(id, name, email, phone_number) values('e9216d32-e717-48f8-9700-3361a3ef2f2d'::uuid, 'Lucas', 'lucas@gmail.com', '999999999999');
+insert into tbl_books(id, title, author, isbn, publication_date) values('cea95b10-5082-46b7-bc2c-2f21be968c06'::uuid, 'Meu livro', 'Lucas', '9783127323207', '2024-10-19');
