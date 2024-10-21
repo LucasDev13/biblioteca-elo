@@ -41,7 +41,6 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     .name(domain.getName())
                     .email(domain.getEmail())
                     .phoneNumber(domain.getPhoneNumber())
-                    .createAt(Instant.now())
                     .build();
         }
         throw new IllegalArgumentException("Domain object cannot be null");
