@@ -6,16 +6,21 @@ create table tbl_users(
     create_at TIMESTAMP WITH TIME ZONE,
     update_at TIMESTAMP WITH TIME ZONE);
 
+create table tbl_categories (
+    id UUID primary key,
+    name varchar(255) not null);
+
 create table tbl_books(
     id uuid primary key,
     title varchar(255) not null,
     author varchar(255) not null,
     isbn varchar(20) unique,
-    category varchar(100) not null,
+    category_id UUID,
     publication_date date,
     registration_date TIMESTAMP WITH TIME ZONE,
     create_at TIMESTAMP WITH TIME ZONE,
-    update_at TIMESTAMP WITH TIME ZONE);
+    update_at TIMESTAMP WITH TIME ZONE,
+    foreign key (category_id) references tbl_categories(id));
 
 create table tbl_loans(
     id uuid primary key, user_id uuid, book_id uuid, loan_date date, return_date date, expected_return_date_book date,

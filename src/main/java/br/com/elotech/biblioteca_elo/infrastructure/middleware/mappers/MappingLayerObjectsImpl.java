@@ -95,7 +95,6 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     .title(domain.getTitle())
                     .author(domain.getAuthor())
                     .isbn(domain.getIsbn())
-                    .category(domain.getCategory())
                     .publicationDate(domain.getPublicationDate())
                     .registrationDate(domain.getRegistrationDate())
                     .build();

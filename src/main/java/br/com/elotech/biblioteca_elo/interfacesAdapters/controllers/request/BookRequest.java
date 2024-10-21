@@ -1,5 +1,6 @@
 package br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request;
 
+import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Category;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PastOrPresent;
 
@@ -16,7 +17,7 @@ public record BookRequest(
         String isbn,
 
         @NotEmpty(message = "Não pode estar vazio ou null!")
-        String category,
+        Category category,
 
         @PastOrPresent(message = "A data precisa estar no passado ou no presente")
         LocalDate publicationDate) {

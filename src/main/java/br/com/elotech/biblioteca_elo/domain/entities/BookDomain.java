@@ -1,5 +1,6 @@
 package br.com.elotech.biblioteca_elo.domain.entities;
 
+import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Category;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class BookDomain {
     private String title;
     private String author;
     private String isbn;
-    private String category;
+    private Category category;
     private LocalDate publicationDate;
     private LocalDateTime registrationDate;
 }
