@@ -1,5 +1,6 @@
 package br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request;
 
+import br.com.elotech.biblioteca_elo.application.validations.ValidEmail;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -10,6 +11,7 @@ public record UserRequest(
 
         @NotEmpty(message = "Não pode estar vazio ou null!")
         @Email
+        @ValidEmail
         String email,
 
         @NotEmpty(message = "Não pode estar vazio ou null!")

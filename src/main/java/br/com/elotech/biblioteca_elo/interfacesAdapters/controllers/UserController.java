@@ -1,6 +1,7 @@
 package br.com.elotech.biblioteca_elo.interfacesAdapters.controllers;
 
-import br.com.elotech.biblioteca_elo.application.validations.EmailValidator;
+import br.com.elotech.biblioteca_elo.application.validations.EmailDomainValidator;
+import br.com.elotech.biblioteca_elo.application.validations.ValidEmail;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.interfaces.UserUseCase;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.UserRequest;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
@@ -33,20 +34,16 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Object> createUser(@Valid @RequestBody UserRequest userRequest) {
-        if(EmailValidator.isValidEmail(userRequest.email())) {
-            UserResponse userResponse = userUseCase.createUser(userRequest);
-            return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
-        }else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        UserResponse userResponse = userUseCase.createUser(userRequest);
+        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@Valid @PathVariable String id) {
-        if(!Objects.isNull(id)){
+        if (!Objects.isNull(id)) {
             UserResponse userResponse = userUseCase.findById(id);
             return new ResponseEntity<>(userResponse, HttpStatus.OK);
-        }else {
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
