@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "tbl_books")
+@Table(name = "tbl_books",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"isbn"}))
 public class Book {
 
     @Id
@@ -50,20 +52,20 @@ public class Book {
 
     @Column(name = "create_at", nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     @PastOrPresent
-    private Instant createAt;
+    private LocalDateTime createAt;
 
     @Column(name = "update_at", nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     @PastOrPresent
-    private Instant updateAt;
+    private LocalDateTime updateAt;
 
     @PrePersist
     public void prePersist(){
-        createAt = Instant.now();
+        createAt = LocalDateTime.now();
     }
 
     @PreUpdate
     public void preUpdate(){
-        updateAt = Instant.now();
+        updateAt = LocalDateTime.now();
     }
 }
 

@@ -3,6 +3,7 @@ package br.com.elotech.biblioteca_elo.interfacesAdapters.controllerAdvice;
 import br.com.elotech.biblioteca_elo.application.exceptions.CreateUserException;
 import br.com.elotech.biblioteca_elo.application.validations.FieldErrorDetails;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -48,5 +49,17 @@ public class RestExceptionHandler{
                 fieldErrors
         );
         return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<RestErrorMessage> uniqueConstraint(DataIntegrityViolationException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.CONFLICT;
+        RestErrorMessage errorMessage = new RestErrorMessage(
+                Instant.now(),
+                status.value(),
+                "Integrity violation: " + e.getRootCause().getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(errorMessage);
     }
 }

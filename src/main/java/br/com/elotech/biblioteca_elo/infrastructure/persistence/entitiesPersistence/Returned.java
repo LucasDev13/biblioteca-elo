@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -48,19 +49,19 @@ public class Returned {
 
     @Column(name = "create_at", nullable = false)
     @PastOrPresent
-    private Instant createAt;
+    private LocalDateTime createAt;
 
     @Column(name = "update_at", nullable = false)
     @PastOrPresent
-    private Instant updateAt;
+    private LocalDateTime updateAt;
 
     @PrePersist
     public void prePersist(){
-        createAt = Instant.now();
+        createAt = LocalDateTime.now();
     }
 
     @PreUpdate
     public void preUpdate(){
-        updateAt = Instant.now();
+        updateAt = LocalDateTime.now();
     }
 }
