@@ -12,6 +12,7 @@ public class BookDomain {
     private String title;
     private String author;
     private String isbn;
+    private String category;
     private LocalDate publicationDate;
     private LocalDateTime registrationDate;
 }

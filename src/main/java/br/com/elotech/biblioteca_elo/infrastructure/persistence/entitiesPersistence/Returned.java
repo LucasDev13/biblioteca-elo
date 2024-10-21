@@ -6,12 +6,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -41,4 +45,22 @@ public class Returned {
 
     @Column(name = "return_date")
     private LocalDate returnDate;
+
+    @Column(name = "create_at", nullable = false)
+    @PastOrPresent
+    private Instant createAt;
+
+    @Column(name = "update_at", nullable = false)
+    @PastOrPresent
+    private Instant updateAt;
+
+    @PrePersist
+    public void prePersist(){
+        createAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        updateAt = Instant.now();
+    }
 }

@@ -13,6 +13,7 @@ import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.Loa
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Objects;
 
 @Component
@@ -40,6 +41,7 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     .name(domain.getName())
                     .email(domain.getEmail())
                     .phoneNumber(domain.getPhoneNumber())
+                    .createAt(Instant.now())
                     .build();
         }
         throw new IllegalArgumentException("Domain object cannot be null");

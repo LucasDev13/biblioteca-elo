@@ -9,10 +9,12 @@ public record UserRequest(
         @NotBlank(message = "Não pode ser em branco e null!")
         @NotEmpty(message = "Não pode estar vazio!")
         String name,
+
         @NotBlank(message = "Não pode ser em branco e null!")
         @NotEmpty(message = "Não pode estar vazio!")
         @Email
         String email,
+
         @NotBlank(message = "Não pode ser em branco e null!")
         @NotEmpty(message = "Não pode estar vazio!")
         @Pattern(regexp = "\\d{12}", message = "O campo deve conter exatamente 12 dígitos")

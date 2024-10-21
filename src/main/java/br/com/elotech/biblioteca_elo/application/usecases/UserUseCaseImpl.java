@@ -23,14 +23,9 @@ public record UserUseCaseImpl(
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
-        User userSaved;
         UserDomain domain = mapper.fromRequestToDomain(userRequest);
-        //Preciso colocar a data de cadastro do usuário. Não pode ser maior que o dia atual.
-        if(!Objects.isNull(domain)){
-            userSaved = repository.save(mapper.fromDomainToEntity(domain));
-        }
-        throw new CreateUserException("Error create user.");
-        //return mapper.fromDomainToResponse(mapper.fromEntityToDomain(userSaved));
+        User userSaved = repository.save(mapper.fromDomainToEntity(domain));
+        return mapper.fromDomainToResponse(mapper.fromEntityToDomain(userSaved));
     }
 
     @Override
