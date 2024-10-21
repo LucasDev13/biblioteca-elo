@@ -82,6 +82,7 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     .title(request.title())
                     .author(request.author())
                     .isbn(request.isbn())
+                    .category(request.category())
                     .publicationDate(request.publicationDate())
                     .build();
         }
@@ -96,6 +97,7 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     .title(domain.getTitle())
                     .author(domain.getAuthor())
                     .isbn(domain.getIsbn())
+                    .category(domain.getCategory())
                     .publicationDate(domain.getPublicationDate())
                     .registrationDate(domain.getRegistrationDate())
                     .build();
@@ -104,15 +106,17 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
     }
 
     @Override
-    public BookDomain fromEntityToDomain(Book entiy) {
-        if (!Objects.isNull(entiy)) {
+    public BookDomain fromEntityToDomain(Book entity) {
+        if (!Objects.isNull(entity)) {
             return BookDomain
                     .builder()
-                    .title(entiy.getTitle())
-                    .author(entiy.getAuthor())
-                    .isbn(entiy.getIsbn())
-                    .publicationDate(entiy.getPublicationDate())
-                    .registrationDate(entiy.getRegistrationDate())
+                    .id(entity.getId())
+                    .title(entity.getTitle())
+                    .author(entity.getAuthor())
+                    .isbn(entity.getIsbn())
+                    .category(entity.getCategory())
+                    .publicationDate(entity.getPublicationDate())
+                    .registrationDate(entity.getRegistrationDate())
                     .build();
         }
         throw new IllegalArgumentException("Entity object cannot be null");
@@ -122,9 +126,11 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
     public BookResponse fromDomainToResponse(BookDomain domain) {
         if (!Objects.isNull(domain)) {
             return new BookResponse(
+                    domain.getId(),
                     domain.getTitle(),
                     domain.getAuthor(),
                     domain.getIsbn(),
+                    domain.getCategory(),
                     domain.getPublicationDate(),
                     domain.getRegistrationDate()
             );
@@ -140,8 +146,8 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
         if (!Objects.isNull(entiy)) {
             return LoanDomain
                     .builder()
-                    .user(entiy.getUser())
-                    .book(entiy.getBook())
+                    .userId(entiy.getUser().getId())
+                    .bookId(entiy.getBook().getId())
                     .loanDate(entiy.getLoanDate())
                     .expectedReturnDateBook(entiy.getExpectedReturnDateBook())
                     .status(entiy.getStatus())
@@ -154,8 +160,8 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
     public LoanResponse fromDomainToResponse(LoanDomain domain) {
         if (!Objects.isNull(domain)) {
             return new LoanResponse(
-                    domain.getUser(),
-                    domain.getBook(),
+                    domain.getUserId(),
+                    domain.getBookId(),
                     domain.getLoanDate(),
                     domain.getExpectedReturnDateBook(),
                     domain.getStatus()
