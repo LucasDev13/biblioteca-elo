@@ -12,6 +12,8 @@ import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.Boo
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.LoanResponse;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
 
+import java.util.List;
+
 public interface MappingLayerObjects {
 
     UserDomain fromRequestToDomain(UserRequest request);
@@ -27,4 +29,6 @@ public interface MappingLayerObjects {
     LoanDomain fromEntityToDomain(Loan entiy);
     LoanResponse fromDomainToResponse(LoanDomain domain);
 
+    List<BookDomain> listFromEntityToDomain(List<Book> books);
+    List<BookResponse> listFromDomainToResponse(List<BookDomain> books);
 }

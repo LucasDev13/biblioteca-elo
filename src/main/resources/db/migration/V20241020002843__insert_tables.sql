@@ -34,7 +34,7 @@ values
 insert into tbl_loans(id, user_id, book_id, loan_date, expected_return_date_book, status)
 values
     ('cdc42a3d-721c-4359-bba8-3ba963fd4931', 'e9216d32-e717-48f8-9700-3361a3ef2f2d', 'cea95b10-5082-46b7-bc2c-2f21be968c06', '2024-10-20', '2024-10-27', 'ACTIVE'),
-    ('2db3d44b-8c44-4c70-8547-e0e44c871157', (select id from tbl_users where name = 'Lucas Fernando'), (select id from tbl_books where title = 'The Great Gatsby'), '2024-01-10', null),
-    ('ff9c2fbd-3748-47a9-8a1a-756483a3b7c2', (select id from tbl_users where name = 'Lucas Fernando'), (select id from tbl_books where title = 'Clean Code'), '2024-01-15', null),
-    ('fee0cd38-6a84-41f1-8d0a-eb981a43be62', (select id from tbl_users where name = 'Lucas Fernando'), (select id from tbl_books where title = 'The Pragmatic Programmer'), '2024-01-20', null),
-    ('0101afe8-73e8-4409-955f-b76d5e91a382', (select id from tbl_users where name = 'Margarida Souza'), (select id from tbl_books where title = 'Sapiens: A Brief History of Humankind'), '2024-02-01', null);
+    ('2db3d44b-8c44-4c70-8547-e0e44c871157', (select id from tbl_users where name = 'Lucas Fernando'), (select id from tbl_books where title = 'The Great Gatsby'), '2024-01-10', '2024-10-27', 'ACTIVE'),
+    ('ff9c2fbd-3748-47a9-8a1a-756483a3b7c2', (select id from tbl_users where name = 'Lucas Fernando'), (select id from tbl_books where title = 'Clean Code'), '2024-01-15', '2024-10-27', 'ACTIVE'),
+    ('fee0cd38-6a84-41f1-8d0a-eb981a43be62', (select id from tbl_users where name = 'Lucas Fernando'), (select id from tbl_books where title = 'The Pragmatic Programmer'), '2024-01-20', '2024-10-27', 'ACTIVE'),
+    ('0101afe8-73e8-4409-955f-b76d5e91a382', (select id from tbl_users where name = 'Margarida Souza'), (select id from tbl_books where title = 'Sapiens: A Brief History of Humankind'), '2024-02-01', '2024-10-27', 'ACTIVE');

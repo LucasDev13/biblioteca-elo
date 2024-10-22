@@ -13,6 +13,7 @@ import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.Loa
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -167,6 +168,34 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
         throw new IllegalArgumentException("Domain object cannot be null");
     }
 
+    @Override
+    public List<BookDomain> listFromEntityToDomain(List<Book> books) {
+        return books.stream()
+                .map(book -> BookDomain.builder()
+                        .id(book.getId())
+                        .title(book.getTitle() != null ? book.getTitle() : "Unknown Title")
+                        .author(book.getAuthor() != null ? book.getAuthor() : "Unknown Author")
+                        .isbn(book.getIsbn() != null ? book.getIsbn() : "Unknown ISBN")
+                        .category(book.getCategory())
+                        .publicationDate(book.getPublicationDate())
+                        .registrationDate(book.getRegistrationDate())
+                        .build()
+                ).toList();
+    }
+
+    @Override
+    public List<BookResponse> listFromDomainToResponse(List<BookDomain> books) {
+        return books.stream()
+                .map(bookDomain -> new BookResponse(
+                        bookDomain.getId(),
+                        bookDomain.getTitle() != null ? bookDomain.getTitle() : "Unknown Title",
+                        bookDomain.getAuthor() != null ? bookDomain.getAuthor() : "Unknown Author",
+                        bookDomain.getIsbn() != null ? bookDomain.getIsbn() : "Unknown ISBN",
+                        bookDomain.getCategory(),
+                        bookDomain.getPublicationDate(),
+                        bookDomain.getRegistrationDate()
+                )).toList();
+    }
 
 
 }

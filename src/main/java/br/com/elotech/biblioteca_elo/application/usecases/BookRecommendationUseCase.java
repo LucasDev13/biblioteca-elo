@@ -5,6 +5,7 @@ import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersiste
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.repositories.bookRepository.BookRepository;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.repositories.loanRepository.LoanRepository;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.BookResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +19,17 @@ public record BookRecommendationUseCase(
 ) {
 
     public List<BookResponse> recommendBooks(UUID userId) {
-        List<UUID> categories = loanRepository.findDistinctCategoriesByUserId(userId);
+        List<UUID> categories = getCategories(userId);
+        List<Book> recommendBooks = getRecommendBooks(userId, categories);
+        return mapper.listFromDomainToResponse(mapper.listFromEntityToDomain(recommendBooks));
+    }
 
-        List<Book> books = bookRepository.findBooksByCategoryAndNotBorrowedByUser(categories, userId);
-        //mapper.fromEntityToDomain(books);
-        return List.of();
+    private List<Book>  getRecommendBooks(UUID userId, List<UUID> categories) {
+        return bookRepository.findBooksByCategoryAndNotBorrowedByUser(categories, userId);
+    }
+
+    private List<UUID> getCategories(UUID userId) {
+        return loanRepository.findDistinctCategoriesByUserId(userId);
     }
 
 }
