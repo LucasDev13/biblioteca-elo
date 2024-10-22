@@ -46,6 +46,11 @@ public record BookUseCaseImpl(
     }
 
     @Override
+    public Book findBookById(UUID id) {
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book id not found" + id));
+    }
+
+    @Override
     public BookResponse updateBook(UUID id, BookRequest request) {
         Book book = findBookById(id);
         book.setTitle(request.title());
@@ -63,10 +68,5 @@ public record BookUseCaseImpl(
         if (!Objects.isNull(book)) {
             repository.delete(book);
         }
-    }
-
-    @Override
-    public Book findBookById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book id not found" + id));
     }
 }
