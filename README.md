@@ -17,4 +17,12 @@ Rodar a imagem:
 ```
 docker run -p 8080:8080 lucaspontesdev/biblioteca-elo:0.0.2
 ```
-### [Swagger - doc dos controllers](http://localhost:8080/swagger-ui/index.html)
+### [Swagger no Railway- documentação dos controllers da api](https://biblioteca-elo-production.up.railway.app/swagger-ui/index.html)
+
+### Links para request no Railway
+Lista de usuários
+http://biblioteca-elo-production.up.railway.app/api/users
+
+Lista de livros
+http://biblioteca-elo-production.up.railway.app/api/books
+
