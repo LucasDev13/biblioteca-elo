@@ -20,13 +20,22 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public record LoanUseCaseImpl(
-        LoanRepository loanRepository,
-        UserRepository userRepository,
-        BookRepository bookRepository,
-        MappingLayerObjects mapper,
-        ApplicationEventPublisher publisher
-) implements LoanUseCase {
+public class LoanUseCaseImpl implements LoanUseCase {
+
+    private final LoanRepository loanRepository;
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
+    private final MappingLayerObjects mapper;
+    private final ApplicationEventPublisher publisher;
+
+    public LoanUseCaseImpl(LoanRepository loanRepository, UserRepository userRepository, BookRepository bookRepository,
+                           MappingLayerObjects mapper, ApplicationEventPublisher publisher) {
+        this.loanRepository = loanRepository;
+        this.userRepository = userRepository;
+        this.bookRepository = bookRepository;
+        this.mapper = mapper;
+        this.publisher = publisher;
+    }
 
     @Override
     public LoanResponse createLoan(UUID userId, UUID bookId) {

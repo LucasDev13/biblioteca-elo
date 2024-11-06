@@ -1,6 +1,5 @@
 package br.com.elotech.biblioteca_elo.application.usecases;
 
-import br.com.elotech.biblioteca_elo.application.exceptions.CreateUserException;
 import br.com.elotech.biblioteca_elo.domain.entities.UserDomain;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.interfaces.UserUseCase;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.mappers.MappingLayerObjects;
@@ -16,10 +15,15 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public record UserUseCaseImpl(
-        MappingLayerObjects mapper,
-        UserRepository repository
-) implements UserUseCase {
+public class UserUseCaseImpl implements UserUseCase {
+
+    private final MappingLayerObjects mapper;
+    private final UserRepository repository;
+
+    public UserUseCaseImpl(MappingLayerObjects mapper, UserRepository repository) {
+        this.mapper = mapper;
+        this.repository = repository;
+    }
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
