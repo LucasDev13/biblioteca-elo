@@ -16,10 +16,15 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public record BookUseCaseImpl(
-        MappingLayerObjects mapper,
-        BookRepository repository
-) implements BookUseCase {
+public class BookUseCaseImpl implements BookUseCase {
+
+    private final MappingLayerObjects mapper;
+    private final BookRepository repository;
+
+    public BookUseCaseImpl(MappingLayerObjects mapper, BookRepository repository) {
+        this.mapper = mapper;
+        this.repository = repository;
+    }
 
 
     @Override

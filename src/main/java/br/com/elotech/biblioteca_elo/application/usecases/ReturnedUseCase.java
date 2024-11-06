@@ -9,9 +9,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
-public record ReturnedUseCase(
-        ReturnedRepository repository
-) {
+public class ReturnedUseCase {
+
+    private final ReturnedRepository repository;
+
+    public ReturnedUseCase(ReturnedRepository repository) {
+        this.repository = repository;
+    }
 
     @EventListener
     public void createReturnedBook(ReturnedBookEvent event){

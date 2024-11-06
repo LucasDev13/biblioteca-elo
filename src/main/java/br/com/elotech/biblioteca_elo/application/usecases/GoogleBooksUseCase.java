@@ -5,9 +5,13 @@ import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.Boo
 
 import java.util.List;
 
-public record GoogleBooksUseCase(
-        GoogleBooksClient googleBooksClient
-) {
+public class GoogleBooksUseCase {
+
+    private final GoogleBooksClient googleBooksClient;
+
+    public GoogleBooksUseCase(GoogleBooksClient googleBooksClient) {
+        this.googleBooksClient = googleBooksClient;
+    }
 
     public List<String> searchBookTitle(String query){
         BookResponseClient response = googleBooksClient.searchBooks(query);
