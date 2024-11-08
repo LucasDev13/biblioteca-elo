@@ -13,9 +13,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/recommendations")
-public record BookRecommendationController(
-    BookRecommendationUseCase bookRecommendationUseCase
-) {
+public class BookRecommendationController{
+
+    private final BookRecommendationUseCase bookRecommendationUseCase;
+
+    public BookRecommendationController(BookRecommendationUseCase bookRecommendationUseCase) {
+        this.bookRecommendationUseCase = bookRecommendationUseCase;
+    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<BookResponse>> listRecommendBooks(@PathVariable UUID userId){
