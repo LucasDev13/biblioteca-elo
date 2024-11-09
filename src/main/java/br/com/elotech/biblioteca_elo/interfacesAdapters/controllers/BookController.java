@@ -41,7 +41,7 @@ public class BookController {
         this.bookUseCase = bookUseCase;
     }
 
-    @Operation(summary = "Create a new book", description = "Creates a new book entry and returns the created book.", tags = {"Books"})
+    @Operation(summary = "Create a new book", description = "Creates a new book entry and returns the created book!", tags = {"Books"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Book created successfully",
                     content = @Content(schema = @Schema(implementation = BookResponse.class))),
