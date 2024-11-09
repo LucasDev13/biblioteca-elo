@@ -40,3 +40,4 @@ jobs:
           pr_title: "Auto PR from develop to production"
           pr_body: "This pull request was automatically generated."
           github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          update_existing_pr: true
