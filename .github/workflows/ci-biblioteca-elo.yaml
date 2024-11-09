@@ -32,7 +32,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check if PR exists
+        id: pr_check
+        run: |
+          PR_NUMBER=$(gh pr list --base production --head develop --json number -q ".[0].number")
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No PR exists. Proceeding to create a new one."
+            echo "pr_exists=false" >> $GITHUB_ENV
+          else
+            echo "PR exists with number $PR_NUMBER"
+            echo "pr_exists=true" >> $GITHUB_ENV
+            echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
+          fi
+
       - name: Create Pull Request to Production
+        if: env.pr_exists == 'false'
         uses: repo-sync/pull-request@v2
         with:
           source_branch: develop
@@ -41,12 +55,11 @@ jobs:
           pr_body: "This pull request was automatically generated."
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          
+
       - name: Approve and Merge Pull Request
-        if: steps.create-pull-request.outputs.pr_created == 'true'
+        if: env.pr_exists == 'true'
         run: |
-          PR_NUMBER=$(gh pr list --base production --head develop --json number -q ".[0].number")
-          gh pr review $PR_NUMBER --approve --body "Auto-approval by GitHub Actions."
-          gh pr merge $PR_NUMBER --merge --delete-branch
+          gh pr review ${{ env.pr_number }} --approve --body "Auto-approval by GitHub Actions."
+          gh pr merge ${{ env.pr_number }} --merge --delete-branch
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
