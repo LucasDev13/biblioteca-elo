@@ -5,54 +5,38 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Builder
-@Entity
-@Table(name = "tbl_books",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"isbn"}))
-public class Book {
+@Entity(name = "contact")
+@Table(name = "tbl_contact")
+public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false)
-    private String title;
+    private String email;
 
-    @Column(nullable = false)
-    private String author;
-
-    @Column(unique = true)
-    private String isbn;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
-    @Column(name = "publication_date")
-    private LocalDate publicationDate;
-
-    @Column(name = "registration_date", nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private LocalDateTime registrationDate;
-
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
 
     @Column(name = "create_at", nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     @PastOrPresent
@@ -62,14 +46,14 @@ public class Book {
     @PastOrPresent
     private LocalDateTime updateAt;
 
-    @PrePersist
-    public void prePersist(){
-        createAt = LocalDateTime.now();
-    }
+    public Contact(
+            @NotEmpty(message = "Não pode estar vazio ou null!")
+            @Email String email,
 
-    @PreUpdate
-    public void preUpdate(){
-        updateAt = LocalDateTime.now();
+            @NotEmpty(message = "Não pode estar vazio ou null!")
+            @Pattern(regexp = "\\d{12}", message = "O campo deve conter exatamente 12 dígitos")
+            String phoneNumber) {
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 }
-
