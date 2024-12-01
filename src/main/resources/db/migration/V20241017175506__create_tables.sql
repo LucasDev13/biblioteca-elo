@@ -1,13 +1,33 @@
-create table tbl_users(
+create table tbl_contact(
     id uuid primary key,
-    name varchar(255) not null,
     email varchar(255) not null,
     phone_number varchar(255) not null,
     create_at TIMESTAMP WITH TIME ZONE,
-    update_at TIMESTAMP WITH TIME ZONE);
+    update_at TIMESTAMP WITH TIME ZONE
+);
+
+create table tbl_person(
+    id uuid primary key,
+    name varchar(255) not null,
+    contact_id uuid not null,
+    create_at TIMESTAMP WITH TIME ZONE,
+    update_at TIMESTAMP WITH TIME ZONE,
+    foreign key (contact_id) references tbl_contact(id)
+);
+
+create table tbl_users(
+    id uuid primary key,
+    login varchar(255) not null,
+    password varchar(255) not null,
+    person_id uuid not null,
+    user_role varchar(255) not null,
+    create_at TIMESTAMP WITH TIME ZONE,
+    update_at TIMESTAMP WITH TIME ZONE,
+    foreign key (person_id) references tbl_person(id)
+);
 
 create table tbl_categories (
-    id UUID primary key,
+    id uuid primary key,
     name varchar(255) not null);
 
 create table tbl_books(

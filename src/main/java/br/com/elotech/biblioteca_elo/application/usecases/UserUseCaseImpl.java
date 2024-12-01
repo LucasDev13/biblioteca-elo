@@ -3,6 +3,7 @@ package br.com.elotech.biblioteca_elo.application.usecases;
 import br.com.elotech.biblioteca_elo.domain.entities.UserDomain;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.interfaces.UserUseCase;
 import br.com.elotech.biblioteca_elo.infrastructure.middleware.mappers.MappingLayerObjects;
+import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Contact;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.User;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.repositories.userRepository.UserRepository;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.UserRequest;
@@ -49,10 +50,10 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public UserResponse updateUser(String id, UserRequest userRequest) {
+        var contact = new Contact(userRequest.email(), userRequest.phoneNumber());
         User user = findUserById(UUID.fromString(id));
-        user.setName(userRequest.name());
-        user.setEmail(userRequest.email());
-        user.setPhoneNumber(user.getPhoneNumber());
+        user.getPerson().setName(userRequest.name());
+        user.getPerson().setContact(List.of(contact));
 
         repository.save(user);
         return mapper.fromDomainToResponse(mapper.fromEntityToDomain(user));

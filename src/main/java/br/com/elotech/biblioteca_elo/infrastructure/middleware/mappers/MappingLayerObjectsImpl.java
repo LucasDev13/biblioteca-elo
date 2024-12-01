@@ -4,70 +4,80 @@ import br.com.elotech.biblioteca_elo.domain.entities.BookDomain;
 import br.com.elotech.biblioteca_elo.domain.entities.LoanDomain;
 import br.com.elotech.biblioteca_elo.domain.entities.UserDomain;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Book;
+import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Contact;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Loan;
+import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.Person;
 import br.com.elotech.biblioteca_elo.infrastructure.persistence.entitiesPersistence.User;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.BookRequest;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.request.UserRequest;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.BookResponse;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.LoanResponse;
 import br.com.elotech.biblioteca_elo.interfacesAdapters.controllers.response.UserResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Component
 public class MappingLayerObjectsImpl implements MappingLayerObjects {
+
+    private static final String OBJECT_DOMAIN_NOT_NULL = "Domain object cannot be null";
+    private static final String OBJECT_ENTITY_NOT_NULL = "Entity object cannot be null";
 
     /*
      * User Mapper
      */
     @Override
     public UserDomain fromRequestToDomain(UserRequest request) {
-        if (!Objects.isNull(request)) {
-            return UserDomain.builder()
-                    .name(request.name())
-                    .email(request.email())
-                    .phoneNumber(request.phoneNumber())
-                    .build();
-        }
-        throw new IllegalArgumentException("Request cannot be null");
+        var contact = new Contact(request.email(), request.phoneNumber());
+        var userDomaion = UserDomain.builder()
+                .person(Person.builder()
+                        .name(request.name())
+                        .contact(List.of(contact))
+                        .build())
+                .build();
+        log.info("--Método fromRequestToDomain--");
+        log.info("Camada de request para domain: {}", userDomaion.toString());
+        return userDomaion;
     }
 
     @Override
     public User fromDomainToEntity(UserDomain domain) {
         if (!Objects.isNull(domain)) {
-            return User.builder()
-                    .name(domain.getName())
-                    .email(domain.getEmail())
-                    .phoneNumber(domain.getPhoneNumber())
-                    .build();
+            var user = User.builder().person(domain.getPerson()).build();
+            log.info("Objeto user: {}", user.toString());
+            return user;
         }
-        throw new IllegalArgumentException("Domain object cannot be null");
+        throw new IllegalArgumentException(OBJECT_DOMAIN_NOT_NULL);
     }
 
     @Override
     public UserDomain fromEntityToDomain(User entity) {
         if (!Objects.isNull(entity)) {
-            return UserDomain.builder()
-                    .name(entity.getName())
-                    .email(entity.getEmail())
-                    .phoneNumber(entity.getPhoneNumber())
+            var userDomain = UserDomain.builder()
+                    .person(entity.getPerson())
                     .build();
+            log.info("--Método fromEntityToDomain--");
+            log.info("Camada de entity para domain: {}", userDomain.toString());
+            return userDomain;
         }
-        throw new IllegalArgumentException("Entity object cannot be null");
+        throw new IllegalArgumentException(OBJECT_ENTITY_NOT_NULL);
     }
 
     @Override
     public UserResponse fromDomainToResponse(UserDomain domain) {
         if (!Objects.isNull(domain)) {
-            return new UserResponse(
-                    domain.getName(),
-                    domain.getEmail(),
-                    domain.getPhoneNumber()
+            var userResponse = new UserResponse(
+                    domain.getPerson().getName(),
+                    domain.getPerson().getContact().stream().map(Contact::getEmail).toString(),
+                    domain.getPerson().getContact().stream().map(Contact::getPhoneNumber).toString()
             );
+            log.info("Objeto user response: {}", userResponse.toString());
+            return userResponse;
         }
-        throw new IllegalArgumentException("Domain object cannot be null");
+        throw new IllegalArgumentException(OBJECT_DOMAIN_NOT_NULL);
     }
 
     /*
@@ -100,7 +110,7 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     .registrationDate(domain.getRegistrationDate())
                     .build();
         }
-        throw new IllegalArgumentException("Domain object cannot be null");
+        throw new IllegalArgumentException(OBJECT_DOMAIN_NOT_NULL);
     }
 
     @Override
@@ -117,7 +127,7 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     .registrationDate(entity.getRegistrationDate())
                     .build();
         }
-        throw new IllegalArgumentException("Entity object cannot be null");
+        throw new IllegalArgumentException(OBJECT_ENTITY_NOT_NULL);
     }
 
     @Override
@@ -133,7 +143,7 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     domain.getRegistrationDate()
             );
         }
-        throw new IllegalArgumentException("Domain object cannot be null");
+        throw new IllegalArgumentException(OBJECT_DOMAIN_NOT_NULL);
     }
 
     /*
@@ -151,7 +161,7 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     .status(entiy.getStatus())
                     .build();
         }
-        throw new IllegalArgumentException("Entity object cannot be null");
+        throw new IllegalArgumentException(OBJECT_ENTITY_NOT_NULL);
     }
 
     @Override
@@ -165,7 +175,7 @@ public class MappingLayerObjectsImpl implements MappingLayerObjects {
                     domain.getStatus()
             );
         }
-        throw new IllegalArgumentException("Domain object cannot be null");
+        throw new IllegalArgumentException(OBJECT_DOMAIN_NOT_NULL);
     }
 
     @Override
